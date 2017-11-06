@@ -213,6 +213,9 @@ def main():  # pragma: no cover
     parser.add_argument(
         '--version', action='version',
         version='.'.join([str(x) for x in __VERSION__]))
+    parser.add_argument(
+        '--default-queue', dest='default_queue',
+        help="default queue name.")
     opts = parser.parse_args()
 
     if opts.verbose:
@@ -228,6 +231,12 @@ def main():  # pragma: no cover
         time.tzset()
 
     app = celery.Celery(broker=opts.broker)
+
+    print(dir(opts))
+    print(opts)
+    if opts.default_queue:
+        print(opts.default_queue)
+        app.conf.task_default_queue = opts.default_queue
 
     if opts.transport_options:
         try:
